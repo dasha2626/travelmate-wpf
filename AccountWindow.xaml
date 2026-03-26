@@ -1,0 +1,70 @@
+﻿<Window
+    x:Class="TravelMate.AccountWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Moje konto"
+    Width="620"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner"
+    Background="#f6f8fb"
+    ResizeMode="NoResize">
+    
+    <Grid Margin="20">
+        <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="#d0d7de" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+               
+                <TextBlock Text="Dane konta" FontSize="20" FontWeight="Bold" Foreground="#2b2d42" HorizontalAlignment="Center" Margin="0 0 0 10" Grid.Row="0"/>
+                
+                <Grid Grid.Row="1" Margin="0 10 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                   
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Login:" VerticalAlignment="Center" Margin="0 6 10 6"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtLogin" Margin="0 6 0 6" Padding="6" IsReadOnly="True"/>
+
+                    
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="E-mail:" VerticalAlignment="Center" Margin="0 6 10 6"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtEmail" Margin="0 6 0 6" Padding="6" IsReadOnly="True"/>
+
+                    
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Dom:" VerticalAlignment="Center" Margin="0 6 10 6"/>
+                    <Grid Grid.Row="2" Grid.Column="1" Margin="0 6 0 6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="160"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txtDom" Grid.Column="0" Padding="6" Height="34" IsReadOnly="True" VerticalAlignment="Center" Margin="0 0 10 0"/>
+                        <Button x:Name="btnPodajDom" Grid.Column="1" Content="🏠 Podaj dom" Height="34" Background="#0078D4" Foreground="White" FontWeight="Bold" Click="BtnPodajDom_Click"/>
+                    </Grid>
+                    
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Aktualne hasło:" VerticalAlignment="Center" Margin="0 6 10 6" />
+                    <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="pwdCurrent" Margin="0 6 0 6" Padding="6" />
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Nowe hasło:" VerticalAlignment="Center" Margin="0 6 10 6" />
+                    <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="pwdNew" Margin="0 6 0 6" Padding="6" />
+                    <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="Aby zmienić hasło, wprowadź zarówno aktualne, jak i nowe hasło. Jeśli nie chcesz zmieniać hasła, pozostaw pola puste." TextWrapping="Wrap" FontSize="11" Foreground="Gray" Margin="0 8 0 0"/>
+                </Grid>
+                
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 8 0 0">
+                    <Button x:Name="btnSave" Content="💾 Zapisz zmiany" Width="180" Height="38" Margin="6" Padding="6" Background="#0078D4" Foreground="White" FontWeight="Bold" Click="SaveChanges_Click"/>
+                    <Button x:Name="btnCancel" Content="❌ Anuluj" Width="120" Height="38" Margin="6" Padding="6" Background="#e5e7eb" Foreground="Black" Click="Cancel_Click"/>
+                    <Button x:Name="btnWyloguj" Content="Wyloguj się" Width="140" Height="38" Margin="6" Background="#D9534F" Foreground="White" FontWeight="Bold" Click="BtnWyloguj_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

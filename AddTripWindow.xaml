@@ -1,0 +1,148 @@
+﻿<Window x:Class="TravelMate.AddTripWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj podróż" Height="720" Width="500"
+        MinHeight="700" MinWidth="480"
+        WindowStartupLocation="CenterOwner" Background="#f6f8fb">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Border Background="White" CornerRadius="10" Padding="20" BorderBrush="#d0d7de" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                
+                        <RowDefinition Height="*"/>
+                    
+                        <RowDefinition Height="Auto"/>
+                  
+                    </Grid.RowDefinitions>
+
+                 
+                    <TextBlock Text="Twoja podróż" FontSize="20" FontWeight="Bold"
+                               Foreground="#2b2d42" Margin="0 0 0 20"
+                               TextAlignment="Center" Grid.Row="0"/>
+
+                    
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                          
+                            <RowDefinition Height="Auto"/>
+                       
+                            <RowDefinition Height="Auto"/>
+                       
+                            <RowDefinition Height="Auto"/>
+                        
+                            <RowDefinition Height="Auto"/>
+                    
+                            <RowDefinition Height="Auto"/>
+                            
+                            <RowDefinition Height="Auto"/>
+                          
+                            <RowDefinition Height="Auto"/>
+                         
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                    
+                        <Grid.Resources>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Height" Value="30"/>
+                                <Setter Property="Margin" Value="0 0 0 10"/>
+                                <Setter Property="Padding" Value="5"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                            <Style TargetType="DatePicker">
+                                <Setter Property="Height" Value="30"/>
+                                <Setter Property="Margin" Value="0 0 0 10"/>
+                                <Setter Property="Padding" Value="5"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                            <Style TargetType="ComboBox">
+                                <Setter Property="Height" Value="30"/>
+                                <Setter Property="Margin" Value="0 0 0 10"/>
+                                <Setter Property="Padding" Value="5"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <TextBlock Text="Tytuł:" Grid.Row="0" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtTytul" Grid.Row="0" Grid.Column="1"/>
+
+                        <TextBlock Text="Kraj:" Grid.Row="1" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtKraj" Grid.Row="1" Grid.Column="1" IsReadOnly="True"/>
+
+                        <TextBlock Text="Miasto:" Grid.Row="2" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtMiasto" Grid.Row="2" Grid.Column="1" IsReadOnly="True"/>
+
+                        <TextBlock Text="Adres:" Grid.Row="3" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <TextBox x:Name="txtAdres" Grid.Row="3" Grid.Column="1" IsReadOnly="True"/>
+
+                        <TextBlock Text="Data rozpoczęcia:" Grid.Row="4" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <DatePicker x:Name="dpStart" Grid.Row="4" Grid.Column="1"
+                                    DisplayDateStart="1930-01-01" DisplayDateEnd="2100-12-31"
+                                    SelectedDateChanged="dpStart_SelectedDateChanged"/>
+
+                        <TextBlock Text="Data zakończenia:" Grid.Row="5" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center"/>
+                        <DatePicker x:Name="dpEnd" Grid.Row="5" Grid.Column="1"
+            DisplayDateStart="1930-01-01" DisplayDateEnd="2100-12-31"
+            SelectedDateChanged="dpEnd_SelectedDateChanged"/>
+
+                        <TextBlock Text="Ocena (1–5):" Grid.Row="6" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <ComboBox x:Name="cbOcena" Grid.Row="6" Grid.Column="1" Visibility="Collapsed">
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+
+                       
+
+                        <TextBlock Text="Opis podróży:" Grid.Row="7" Grid.Column="0" Margin="0 0 10 10" VerticalAlignment="Top"/>
+                        <TextBox x:Name="txtOpis" Grid.Row="7" Grid.Column="1"
+                                 AcceptsReturn="True" TextWrapping="Wrap"
+                                 Height="80" VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+
+                 
+              
+                    <Grid Grid.Row="2" Margin="0 20 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                     
+                            <RowDefinition Height="Auto"/>
+                         
+                            <RowDefinition Height="Auto"/>
+                          
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                  
+                        <Button Content="💾 Zapisz" Grid.Row="0" Grid.Column="0" Margin="5" Padding="6" Click="SaveTrip_Click" Background="#0078d4" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+                        <Button Content="🗑 Usuń" Grid.Row="0" Grid.Column="1" Margin="5" Padding="6" Click="DeleteTrip_Click" Background="#e11d48" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+                     
+                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                       
+                            <Button Grid.Row="1" Grid.Column="0" Margin="5" Padding="6" Content="📘 Szczegóły" Background="#2563eb" Foreground="White" FontWeight="Bold" Click="BtnDetails_Click" Cursor="Hand" HorizontalAlignment="Stretch"/>
+                            <Button Grid.Row="1" Grid.Column="1" Margin="5" Padding="6" Content="🗺 Zobacz szczegóły" Background="#10b981" Foreground="White" FontWeight="Bold" Click="BtnShowRoute_Click" Cursor="Hand" HorizontalAlignment="Stretch"/>
+                        </Grid>
+                  
+                        <Button Content="❌ Anuluj" Grid.Row="2" Grid.Column="0" Margin="5" Padding="6" Click="Cancel_Click" Background="#e5e7eb" Foreground="Black" Cursor="Hand"/>
+                        <Button x:Name="BtnChangeLocation" Content="📍 Zmień lokalizację" Grid.Row="2" Grid.Column="1" Margin="5" Padding="6" Click="BtnChangeLocation_Click"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Window>
+

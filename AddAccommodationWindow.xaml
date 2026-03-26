@@ -1,0 +1,156 @@
+﻿<Window x:Class="TravelMate.AddAccommodationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj nocleg"
+        Height="550"
+        Width="400"
+        WindowStartupLocation="CenterOwner"
+        Background="#f8fafc">
+
+    <Window.Resources>
+
+
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,10,0,4"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+      
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        
+        <Style TargetType="ComboBox">
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+       
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,5,0,10"/>
+        </Style>
+
+        
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="#E5E7EB"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="Padding" Value="10,7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+    </Window.Resources>
+
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <Border Background="White"
+                CornerRadius="12"
+                Padding="20"
+                Margin="15"
+                BorderBrush="#E5E7EB"
+                BorderThickness="1">
+
+            <StackPanel>
+
+                <TextBlock Text="Nazwa noclegu" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtAccommodationName"/>
+
+              
+                <TextBlock Text="Typ noclegu" Style="{StaticResource LabelStyle}"/>
+                <ComboBox x:Name="cmbAccommodationType"
+                          IsEditable="True"
+                          SelectionChanged="cmbAccommodationType_SelectionChanged"/>
+
+                
+                <TextBlock Text="Adres" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtAddress" IsReadOnly="True"/>
+                <Button Content="Ustaw adres na mapie"
+                        Width="240"
+                        Click="BtnSetAccommodationAddressOnMap_Click"
+                        Style="{StaticResource SecondaryButton}"/>
+
+               
+                <TextBlock Text="Data zameldowania" Style="{StaticResource LabelStyle}"/>
+                <DatePicker x:Name="dpCheckInDate"/>
+
+                <TextBlock Text="Data wymeldowania" Style="{StaticResource LabelStyle}"/>
+                <DatePicker x:Name="dpCheckOutDate"/>
+
+                
+                <TextBlock Text="Cena" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtPrice"
+                           Width="120"
+  Text="0.00"
+  PreviewTextInput="txtPrice_PreviewTextInput"
+  PreviewKeyDown="txtPrice_PreviewKeyDown"
+  GotFocus="txtPrice_GotFocus"
+  TextAlignment="Center"/>
+
+                <TextBlock Text="Waluta" Style="{StaticResource LabelStyle}"/>
+                <ComboBox x:Name="cmbCurrency"
+                          Width="120"
+                          SelectionChanged="cmbCurrency_SelectionChanged">
+                    <ComboBoxItem Content="PLN" IsSelected="True"/>
+                    <ComboBoxItem Content="EUR"/>
+                    <ComboBoxItem Content="USD"/>
+                </ComboBox>
+
+             
+                <TextBlock Text="Ocena (1–5)" Style="{StaticResource LabelStyle}"/>
+                <ComboBox x:Name="cmbRating"
+          Width="60"
+          SelectedIndex="-1">
+                    <ComboBoxItem Content="1"/>
+                    <ComboBoxItem Content="2"/>
+                    <ComboBoxItem Content="3"/>
+                    <ComboBoxItem Content="4"/>
+                    <ComboBoxItem Content="5"/>
+                </ComboBox>
+
+             
+                <TextBlock Text="Uwagi" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtNotes"
+                         AcceptsReturn="True"
+                         Height="70"
+                         TextWrapping="Wrap"/>
+
+              
+                <Button Content="Zapisz nocleg"
+                        Width="180"
+                        HorizontalAlignment="Center"
+                        Click="BtnSaveAccommodation_Click"
+                        Style="{StaticResource PrimaryButton}"
+                        Margin="0,25,0,0"/>
+
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</Window>

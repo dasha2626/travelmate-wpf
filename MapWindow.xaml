@@ -1,0 +1,926 @@
+﻿<Window x:Class="TravelMate.MapWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gmap="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+        xmlns:local="clr-namespace:TravelMate"
+        Title="Mapa" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="CanResize"
+        Background="White">
+    <Window.Resources>
+        <Style x:Key="SzczegolyButtonStyle" TargetType="Button">
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="#FF1976D2"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF1565C0"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF0D47A1"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#FFB0BEC5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+      
+<Style x:Key="PrimarySquareButton" TargetType="Button">
+    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="Height" Value="32"/>
+    <Setter Property="Background" Value="#FF1976D2"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="12,4"/>
+
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FF1565C0"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FF0D47A1"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+
+
+<Style x:Key="ResetButtonStyle" TargetType="Button">
+    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="Height" Value="32"/>
+    <Setter Property="Background" Value="#FF9E9E9E"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="12,4"/>
+
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#FF757575"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#FF616161"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+
+<Style x:Key="TravelButtonStyle" TargetType="Button">
+    <Setter Property="Background" Value="#FF1976D2"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="6,2"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+    <Style.Triggers>
+        <Trigger Property="IsMouseOver" Value="True">
+            <Setter Property="Background" Value="#FF1565C0"/>
+        </Trigger>
+        <Trigger Property="IsPressed" Value="True">
+            <Setter Property="Background" Value="#FF0D47A1"/>
+        </Trigger>
+        <Trigger Property="IsEnabled" Value="False">
+            <Setter Property="Background" Value="#FFB0BEC5"/>
+        </Trigger>
+    </Style.Triggers>
+</Style>
+        <local:EmptyDayVisibilityConverter x:Key="EmptyDayVisibilityConverter"/>
+
+    </Window.Resources>
+
+    <Grid>
+
+        <TabControl x:Name="tabControl">
+            <TabControl.Resources>
+
+                <Style TargetType="TabPanel">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="IsItemsHost" Value="True"/>
+                </Style>
+
+
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border 
+                            Background="White"
+                            CornerRadius="10,10,0,0"
+                            BorderThickness="1"
+                            BorderBrush="#d0d7de"
+                            Padding="10,5"
+                            Margin="2,0">
+                                    <ContentPresenter 
+                                ContentSource="Header"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+            </TabControl.Resources>
+
+
+            <TabItem Header="Mapa">
+                <Grid>
+                    <gmap:GMapControl x:Name="MainMap"
+                                      Zoom="12"
+                                      MinZoom="1"
+                                      MaxZoom="20"
+                                      MouseWheelZoomType="MousePositionAndCenter"
+                                      CanDragMap="True"/>
+
+                    <Button x:Name="btnAccount"
+                            Content="👤 Konto"
+                            Width="100"
+                            Height="35"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Margin="0,10,10,0"
+                            Background="#0078D4"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="BtnKonto_Click"/>
+
+                    <Border Background="#AAFFFFFF"
+                            CornerRadius="10"
+                            Padding="5"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="10,60,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="txtZwiedzoneKraje"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Text="Zwiedzone kraje: 0 🌍"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                            <Button x:Name="btnHighlightCountries"
+                                    Content="Pokaż kraje"
+                                    Width="120"
+                                    Height="30"
+                                    Click="BtnHighlightCountries_Click"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Button x:Name="btnRestoreAddTrip"
+                Content="🔼 Pokaż podróż"
+                Width="150"
+                Height="35"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10,10,0,0"
+                Background="#FF0078D4"
+                Foreground="White"
+                FontWeight="Bold"
+                Visibility="Collapsed"
+                Click="BtnRestoreAddTrip_Click"/>
+                    
+                    
+                </Grid>
+            </TabItem>
+
+    
+            <TabItem Header="Kalendarz">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+
+
+                        <Button x:Name="btnPrevMonth"
+            Content="◀"
+            Width="40" Height="30"
+            Click="BtnPrevMonth_Click"
+            Margin="2"
+            FontWeight="Bold"
+            Background="#FFB2DFDB"
+            Foreground="#333"
+            BorderThickness="0"
+            Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF80CBC4"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="#FF4DB6AC"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+
+                        <TextBlock x:Name="txtMonthYear"
+               FontSize="16"
+               FontWeight="Bold"
+               Margin="10,0"
+               VerticalAlignment="Center"/>
+
+                        <Button x:Name="btnNextMonth"
+            Content="▶"
+            Width="40" Height="30"
+            Click="BtnNextMonth_Click"
+            Margin="2"
+            FontWeight="Bold"
+            Background="#FFB2DFDB"
+            Foreground="#333"
+            BorderThickness="0"
+            Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#FF80CBC4"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="#FF4DB6AC"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <ComboBox x:Name="cmbYear"
+              Width="80"
+              Margin="20,0,0,0"
+              SelectionChanged="cmbYear_SelectionChanged"
+              FontWeight="SemiBold"
+              Background="#FFEEEEEE"
+              Foreground="#333"
+              BorderThickness="1"
+              BorderBrush="#CCC"
+              Padding="4"
+              Cursor="Hand">
+
+                            <ComboBox.Resources>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Background" Value="#FFEEEEEE"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </ComboBox.Resources>
+                        </ComboBox>
+
+
+
+
+                        <Button x:Name="btnToday"
+        Content="Dzisiaj"
+        Width="80"
+        Height="30"
+        Margin="20,0,0,0"
+        Background="#FFB2DFDB"
+        Foreground="#333"
+        FontWeight="Bold"
+        BorderThickness="0"
+        Cursor="Hand"
+        Click="BtnToday_Click"/>
+
+                    </StackPanel>
+
+
+
+                    <UniformGrid Grid.Row="1" Columns="7" Margin="10,0,10,5">
+                        <TextBlock Text="Pn" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="Wt" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="Śr" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="Cz" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="Pt" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="Sb" HorizontalAlignment="Center" FontWeight="Bold" Foreground="#555"/>
+                        <TextBlock Text="Nd" HorizontalAlignment="Center" FontWeight="Bold" Foreground="#B22222"/>
+                    </UniformGrid>
+
+
+                    <ScrollViewer Grid.Row="2">
+                        <ItemsControl x:Name="calendarGrid">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="7"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#E0E0E0"
+                                BorderThickness="1"
+                                Padding="6"
+                                Margin="2"
+                                Background="#FAFAFA"
+                                CornerRadius="6"
+                                MouseEnter="CalendarDay_MouseEnter"
+                                MouseLeave="CalendarDay_MouseLeave"
+                                MouseLeftButtonUp="CalendarDay_Click"
+                                Visibility="{Binding DayNumber, Converter={StaticResource EmptyDayVisibilityConverter}}">
+
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding DayNumber}" FontWeight="Bold"/>
+                                            <ItemsControl ItemsSource="{Binding Trips}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Content="{Binding Name}"
+                    Tag="{Binding TripId}"
+                    Click="TripButton_Click"
+                    Margin="2"
+                    Padding="4,2"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Stretch"
+                    Background="#0078D4"
+                    Foreground="White"
+                    BorderThickness="0">
+                                                            <Button.Effect>
+                                                                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="0.3"/>
+                                                            </Button.Effect>
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Background" Value="#FF4CAF50"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="Button">
+                                                                                <Border Background="{TemplateBinding Background}" 
+                                            CornerRadius="6"
+                                            Padding="{TemplateBinding Padding}">
+                                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                                </Border>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                    <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Background" Value="#FF45A049"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter Property="Background" Value="#FF388E3C"/>
+                                                                        </Trigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+
+                                        </StackPanel>
+
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Grid>
+            </TabItem>
+
+
+
+            
+
+
+            <TabItem Header="Statystyki">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+
+                            <RowDefinition Height="Auto"/>
+
+                            <RowDefinition Height="*"/>
+     
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Od:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <DatePicker x:Name="dpOd" Width="120"/>
+                            <TextBlock Text="Do:" VerticalAlignment="Center" Margin="10,0,5,0"/>
+                            <DatePicker x:Name="dpDo" Width="120"/>
+                            <Button Content="Filtruj"
+        Style="{StaticResource PrimarySquareButton}"
+        Click="Filtruj_Click"
+        Margin="10,0,0,0"/>
+
+
+                            <TextBlock Text="Sortuj:" VerticalAlignment="Center" Margin="20,0,5,0"/>
+                            <ComboBox x:Name="cbSortowanie" Width="160" SelectionChanged="CbSortowanie_SelectionChanged">
+                                <ComboBoxItem Content="Czas ⬆" ToolTip="Czas trwania podróży: od najkrótszej do najdłuższej"/>
+                                <ComboBoxItem Content="Czas ⬇" ToolTip="Czas trwania podróży: od najdłuższej do najkrótszej"/>
+                                <ComboBoxItem Content="Cena ⬆" ToolTip="Koszt podróży: od najtańszej do najdroższej"/>
+                                <ComboBoxItem Content="Cena ⬇" ToolTip="Koszt podróży: od najdroższej do najtańszej"/>
+                                <ComboBoxItem Content="Odległość ⬆" ToolTip="Odległość od domu: od najbliższej do najdalszej"/>
+                                <ComboBoxItem Content="Odległość ⬇" ToolTip="Odległość od domu: od najdalszej do najbliższej"/>
+                                <ComboBoxItem Content="Data ⬆" ToolTip="Data rozpoczęcia podróży: od najwcześniejszej do najpóźniejszej"/>
+                                <ComboBoxItem Content="Data ⬇" ToolTip="Data rozpoczęcia podróży: od najpóźniejszej do najwcześniejszej"/>
+                            </ComboBox>
+
+
+                            <Button Content="Resetuj"
+        Style="{StaticResource PrimarySquareButton}"
+        Click="Resetuj_Click"
+        Margin="10,0,0,0"/>
+                            <Button Content="Eksportuj do PDF" Click="EksportujPdf_Click" Width="150" Height="30" Margin="10"/>
+
+
+                        </StackPanel>
+
+
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="💰 Łącznie wydane:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLacznieWydane"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🛏️ Łącznie nocy:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLacznieNocy"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="✈️ Łącznie lotów:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLacznieLotow"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="💸 Średni koszt:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtSredniKoszt"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🛣️ Łącznie km:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLacznieKm"/>
+                                </StackPanel>
+                            </Grid>
+
+
+                            <Grid Grid.Row="1" Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🗓️ Łącznie dni:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLacznieDni"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🚆 Łącznie pociągów:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtLaczniePociagow"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🥇 Najdroższa podróż:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtNajdrozsza"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🥈 Najtańsza podróż:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtNajtansza"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+
+                                </StackPanel>
+                            </Grid>
+
+     
+                            <Grid Grid.Row="2" Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🌎 Odwiedzone kraje:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtKraje"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🏙️ Odwiedzone miasta:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtMiasta"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="⭐ Średnia ocena:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtSredniaOcena"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+                                    <TextBlock Text="🎯 Top kategoria:" FontWeight="Bold"/>
+                                    <TextBlock x:Name="txtTopKategoria"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" HorizontalAlignment="Center" TextBlock.TextAlignment="Center">
+
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+
+
+                        <StackPanel Grid.Row="2" Orientation="Vertical">
+
+                            <Border Background="#FFF" Margin="2" Padding="6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Nazwa" FontWeight="Bold" Grid.Column="0"/>
+                                    <TextBlock Text="Adres" FontWeight="Bold" Grid.Column="1"/>
+                                    <TextBlock Text="Data od" FontWeight="Bold" Grid.Column="2"/>
+                                    <TextBlock Text="Data do" FontWeight="Bold" Grid.Column="3"/>
+                                    <TextBlock Text="" Grid.Column="4"/>
+                                </Grid>
+                            </Border>
+
+
+                            <ItemsControl x:Name="icPodroze">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:Podroz}">
+                                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="6" Padding="6" Margin="2">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="4*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Text="{Binding tytul}" Grid.Column="0" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding pelnyAdres}" Grid.Column="1" TextWrapping="Wrap"/>
+                                                <TextBlock Text="{Binding data_od, StringFormat=\{0:dd.MM.yyyy\}}" Grid.Column="2"/>
+                                                <TextBlock Text="{Binding data_do, StringFormat=\{0:dd.MM.yyyy\}}" Grid.Column="3"/>
+
+                                                <Button Content="Szczegóły"
+        Style="{StaticResource SzczegolyButtonStyle}"
+        Grid.Column="4"
+        Click="Szczegoly_Click"
+        DataContext="{Binding}"/>
+
+
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+
+            <TabItem Header="Rekomendacje">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Padding="15" Background="#EEF2F7" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="Podaj swoje preferencje podróży:"
+                               FontWeight="Bold"
+                               FontSize="18"
+                               Foreground="#333"
+                               Margin="0,0,0,12"/>
+
+                                <TextBlock Text="Aktywności:" FontWeight="SemiBold" Foreground="#444"/>
+                                <WrapPanel Margin="0,5,0,5">
+                                    <CheckBox x:Name="CboxNarty" Content="Narty" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxMuzea" Content="Muzea" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxArchitektura" Content="Architektura" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxPlaza" Content="Plaża" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxGory" Content="Góry" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxPrzyroda" Content="Przyroda" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxKluby" Content="Kluby i imprezy" Margin="5,0,5,5"/>
+                                    <CheckBox x:Name="CboxSport" Content="Eventy sportowe" Margin="5,0,5,5"/>
+                                </WrapPanel>
+
+
+                                <TextBlock Text="Inna aktywność (opcjonalnie):" FontWeight="SemiBold" Margin="0,5,0,2"/>
+                                <TextBox x:Name="InnaAktywnoscTextBox" Width="200"/>
+
+                                
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <StackPanel Margin="0,0,15,0">
+                                        <TextBlock Text="Budżet:" FontWeight="SemiBold"/>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox x:Name="BudzetTextBox"
+         Width="120"
+         Text="{Binding BudzetString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         PreviewTextInput="BudzetTextBox_PreviewTextInput"
+         DataObject.Pasting="BudzetTextBox_Pasting"
+         Margin="0,0,8,0"/>
+
+
+                                            <TextBlock Text="PLN"
+                       VerticalAlignment="Center"
+                       Foreground="#555"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Kontynent / kraj:" FontWeight="SemiBold"/>
+                                        <TextBox x:Name="LokalizacjaTextBox" Width="180"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Margin="0,0,10,0">
+                                        <TextBlock Text="Od:" FontWeight="SemiBold"/>
+                                        <DatePicker x:Name="DataOdPicker"
+            Width="120"
+            SelectedDateChanged="DataOdPicker_SelectedDateChanged"/>
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Do:" FontWeight="SemiBold"/>
+                                        <DatePicker x:Name="DataDoPicker"
+            Width="120"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+
+                        <Button Grid.Row="1"
+                    Width="220"
+                    Height="40"
+                    Background="#0078D4"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    BorderThickness="0"
+                    Margin="0,0,0,15"
+                    Click="GenerujRekomendacje_Click"
+                    Content="Generuj rekomendacje">
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+
+                        <ListBox x:Name="RekomendacjeListBox"
+                     Grid.Row="2"
+                     Background="Transparent"
+                     BorderThickness="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FFFFFF"
+                                Padding="15"
+                                Margin="0,0,0,12">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Tytul}"
+                                           FontSize="17"
+                                           FontWeight="SemiBold"
+                                           Foreground="#222"
+                                           Margin="0,0,0,6"/>
+                                            <TextBlock Text="{Binding Opis}"
+                                           TextWrapping="Wrap"
+                                           Foreground="#555"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Znajdź podróż">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="20">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- formularz wyszukiwania -->
+                            <RowDefinition Height="*"/>
+                            <!-- mapa -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Formularz wyszukiwania – dwie kolumny -->
+                        <Grid Grid.Row="0" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <!-- kolumna loty -->
+                                <ColumnDefinition Width="20"/>
+                                <!-- odstęp -->
+                                <ColumnDefinition Width="300"/>
+                                <!-- kolumna punkty zwiedzania -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- LEWA KOLUMNA – loty -->
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Szukaj podróży:" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Miasto startowe:" VerticalAlignment="Center" Width="100"/>
+                                    <TextBox x:Name="txtStartCity" Width="180"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Miasto docelowe:" VerticalAlignment="Center" Width="100"/>
+                                    <TextBox x:Name="txtEndCity" Width="180"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Data od:" VerticalAlignment="Center" Width="100"/>
+                                    <DatePicker x:Name="dpStartDate" Width="180"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Data do:" VerticalAlignment="Center" Width="100"/>
+                                    <DatePicker x:Name="dpEndDate" Width="180"/>
+                                </StackPanel>
+
+                                <Button Content="Szukaj" Width="120" Height="35"
+                            Background="#0078D4" Foreground="White" FontWeight="Bold"
+                            Click="BtnSzukajPodroz_Click" Margin="0,0,0,10"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <Button Content="⬅ Poprzedni lot" Width="140" Margin="0,0,10,0" Click="PrevFlight_Click"/>
+                                    <Button Content="Następny lot ➡" Width="140" Click="NextFlight_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- PRAWA KOLUMNA – punkty zwiedzania -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Znajdź atrakcje:" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Miasto:" VerticalAlignment="Center" Width="100"/>
+                                    <TextBox x:Name="txtCityPOI" Width="180"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <TextBlock Text="Typ punktu:" VerticalAlignment="Center" Width="100"/>
+                                    <ComboBox x:Name="cbPOIType" Width="180">
+                                        <ComboBoxItem Content="museums"/>
+                                        <ComboBoxItem Content="historic"/>
+                                        <ComboBoxItem Content="restaurants"/>
+                                        <ComboBoxItem Content="interesting_places"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <Button Content="Szukaj punkty" Width="120" Height="35"
+                            Background="#0078D4" Foreground="White" FontWeight="Bold"
+                            Click="BtnSzukajPOI_Click" Margin="0,0,0,10"/>
+                                <Button Content="Pokaż lotniska"
+        Width="140"
+        Height="35"
+        Background="#0078D4"
+        Foreground="White"
+        FontWeight="Bold"
+        Click="BtnLoadAirports_Click"
+        Margin="0,10,0,0"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                    <Button Content="◀" Width="40" Click="BtnPrevPOI_Click"/>
+                                    <TextBlock x:Name="txtPOICounter" Text="0 / 0" VerticalAlignment="Center" Margin="5,0"/>
+                                    <Button Content="▶" Width="40" Click="BtnNextPOI_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Mapa pod formularzem -->
+                        <Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="6">
+                            <gmap:GMapControl x:Name="SearchMap"
+                                  Zoom="5"
+                                  MinZoom="1"
+                                  MaxZoom="20"
+                                  CanDragMap="True"
+                                  MouseWheelZoomType="MousePositionAndCenter"
+                                  Margin="5"/>
+                        </Border>
+
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

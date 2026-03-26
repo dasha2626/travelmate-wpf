@@ -1,0 +1,26 @@
+[
+  {
+    "From": "Katowice",
+    "To": "Mediolan",
+    "Date": "2026-03-11",
+    "Lat": 50.2649,
+    "Lng": 19.0238,
+    "Airline": "WizzAir"
+  },
+  {
+    "From": "Katowice",
+    "To": "Ateny",
+    "Date": "2026-03-11",
+    "Lat": 50.2649,
+    "Lng": 19.0238,
+    "Airline": "WizzAir"
+  },
+  {
+    "From": "Warszawa",
+    "To": "Budapeszt",
+    "Date": "2026-03-13",
+    "Lat": 52.2297,
+    "Lng": 21.0122,
+    "Airline": "WizzAir"
+  }
+]

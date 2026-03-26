@@ -1,0 +1,643 @@
+﻿<Window x:Class="TravelMate.TripDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        Title="Szczegóły podróży"
+        Height="750" Width="950"
+        MinHeight="700" MinWidth="900"
+        WindowStartupLocation="CenterOwner"
+        Background="#f8fafc">
+
+    <Grid Margin="20">
+        <Border Background="White" CornerRadius="10" Padding="15"
+                BorderBrush="#d0d7de" BorderThickness="1">
+
+            <TabControl x:Name="tabDetails">
+                <TabControl.Resources>
+
+                    <Style TargetType="TabPanel">
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="IsItemsHost" Value="True"/>
+                    </Style>
+
+                    <Style TargetType="TabItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TabItem">
+                                    <Border 
+                                        Background="White"
+                                        CornerRadius="10,10,0,0"
+                                        BorderThickness="1"
+                                        BorderBrush="#d0d7de"
+                                        Padding="10,5"
+                                        Margin="2,0">
+                                        <ContentPresenter 
+                                            ContentSource="Header"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#222222"/>
+                    </Style>
+
+                   
+                    <Style TargetType="TextBlock" x:Key="FieldLabel">
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Margin" Value="0,5,0,2"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#1a1a1a"/>
+                    </Style>
+
+                    
+                    <Style TargetType="Button">
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Padding" Value="5,3"/>
+                        <Setter Property="Background" Value="#0078D7"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#005a9e"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Margin" Value="0,5,0,0"/>
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#005a9e"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#004578"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                   
+                    <Style TargetType="Expander">
+                        <Setter Property="Background" Value="#f5f5f5"/>
+                        <Setter Property="BorderBrush" Value="#d0d7de"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="Margin" Value="0,0,0,10"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                    </Style>
+
+                </TabControl.Resources>
+
+               
+
+                <TabItem Header="Dojazd">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                      
+                        <Button Content="Dodaj nowy dojazd"
+                                Width="160"
+                                Height="30"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,15"
+                                Click="BtnOpenAddRouteWindow_Click"/>
+
+                      
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled" Padding="5">
+                            <ItemsControl x:Name="lstRoutes" HorizontalAlignment="Stretch">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Expander>
+                                           
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Naglowek}" TextWrapping="Wrap" />
+                                            </Expander.Header>
+
+                                            <StackPanel Margin="10">
+
+                                                
+                                                <StackPanel x:Name="viewMode">
+                                                    <TextBlock Text="Start:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding StartAddress}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Koniec:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding EndAddress}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Środek transportu:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding Transport}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Przewoźnik:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding Przewoznik}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Numer rejsu:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding NumerRejsu}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data wyjazdu:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding DataWyjazdu}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data przyjazdu:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding DataPrzyjazdu}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Cena:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock>
+                                                        <Run Text="{Binding CenaDecimal, StringFormat=F2}"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding Waluta}"/>
+                                                    </TextBlock>
+
+                                                    <TextBlock Text="Uwagi:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBlock Text="{Binding Uwagi}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                                                    <Button Content="Edytuj" Width="120"
+                                                            HorizontalAlignment="Left"
+                                                            Click="BtnEditRoute_Click"/>
+                                                </StackPanel>
+
+                                               
+                                                <StackPanel x:Name="editMode" Visibility="Collapsed">
+                                                    <TextBox x:Name="txtStartAddress" 
+                                                             Text="{Binding StartAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                             IsReadOnly="True" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                                                    <Button Content="Zmień punkt startowy"
+                                                            Click="BtnEditStartPoint_Click"
+                                                            Width="200" Margin="0,10,0,0"/>
+
+                                                    <TextBox x:Name="txtEndAddress" 
+                                                             Text="{Binding EndAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                                             IsReadOnly="True" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                                                    <Button Content="Zmień punkt końcowy"
+                                                            Click="BtnEditEndPoint_Click"
+                                                            Width="200" Margin="0,0,0,10"/>
+
+                                                    <TextBlock Text="Środek transportu:" Style="{StaticResource FieldLabel}"/>
+                                                    <ComboBox x:Name="cmbTransport" 
+                                                              SelectedValue="{Binding Transport}" 
+                                                              SelectedValuePath="Content">
+                                                        <ComboBoxItem Content="Samochód"/>
+                                                        <ComboBoxItem Content="Autobus"/>
+                                                        <ComboBoxItem Content="Pociąg"/>
+                                                        <ComboBoxItem Content="Samolot"/>
+                                                        <ComboBoxItem Content="Statek"/>
+                                                        <ComboBoxItem Content="Inny"/>
+                                                    </ComboBox>
+
+                                                    <TextBlock Text="Przewoźnik:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtCarrier" Text="{Binding Przewoznik}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Numer rejsu:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtRouteNumber" Text="{Binding NumerRejsu}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data wyjazdu:" Style="{StaticResource FieldLabel}"/>
+                                                    <DatePicker x:Name="dpDeparture" SelectedDate="{Binding DataWyjazduDate, Mode=TwoWay}" Margin="0,0,0,5"/>
+                                                    <TextBlock Text="Godzina wyjazdu (HH:MM):" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtDepartureTime" 
+         Width="100" 
+         Margin="0,0,0,5"
+         Text="00:00"
+         PreviewTextInput="txtTime_PreviewTextInput"
+         PreviewKeyDown="txtTime_PreviewKeyDown"
+         GotFocus="txtTime_GotFocus"/>
+                                                    <TextBlock Text="Data przyjazdu:" Style="{StaticResource FieldLabel}"/>
+                                                    <DatePicker x:Name="dpArrival" SelectedDate="{Binding DataPrzyjazduDate, Mode=TwoWay}" Margin="0,0,0,5"/>
+                                                    <TextBlock Text="Godzina przyjazdu (HH:MM):" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox x:Name="txtArrivalTime" 
+         Width="100" 
+         Margin="0,0,0,5"
+         Text="00:00"
+         PreviewTextInput="txtTime_PreviewTextInput"
+         PreviewKeyDown="txtTime_PreviewKeyDown"
+         GotFocus="txtTime_GotFocus"/>
+                                                    <TextBlock Text="Cena:" Style="{StaticResource FieldLabel}"/>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBox Width="120"
+                                                                 Text="{Binding CenaString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                 Margin="0,0,10,0"/>
+                                                        <ComboBox Width="70"
+                                                                  ItemsSource="{Binding DostepneWaluty}"
+                                                                  SelectedItem="{Binding Waluta, Mode=TwoWay}"/>
+                                                    </StackPanel>
+
+                                                    <TextBlock Text="Uwagi:" Style="{StaticResource FieldLabel}"/>
+                                                    <TextBox Text="{Binding Uwagi}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Margin="0,10,0,0"
+                                                                HorizontalAlignment="Left">
+                                                        <Button Content="Zapisz"
+            Click="BtnSaveEditedRoute_Click"
+            Width="120"
+            Height="30"
+            Padding="5,2"
+            Margin="0,0,10,0"
+            Background="#007ACC"
+            Foreground="White"
+            BorderBrush="#005A9E"/>
+
+                                                        <Button Content="Usuń"
+            Click="BtnDeleteRoute_Click"
+            Width="120"
+            Height="30"
+            Padding="5,2"
+            Background="#D32F2F"
+            Foreground="White"
+            BorderBrush="#B71C1C"/>
+
+                                                    </StackPanel>
+
+                                                </StackPanel>
+
+                                            </StackPanel>
+                                        </Expander>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Nocleg">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                      
+                        <Button Content="Dodaj nocleg"
+                Width="160"
+                Height="30"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,15"
+                Click="BtnOpenAddAccommodationWindow_Click"/>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl x:Name="lstAccommodations" HorizontalAlignment="Stretch">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Expander Margin="0,0,0,10" >
+                                           
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Naglowek}" TextWrapping="Wrap"/>
+                                            </Expander.Header>
+
+                                           
+                                            <StackPanel Margin="10">
+                                               
+                                                <StackPanel x:Name="viewMode">
+                                                    <TextBlock Text="Kategoria:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Kategoria}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Nazwa:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Nazwa}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Adres:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Adres}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data zameldowania:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding DataOdDate, StringFormat=dd.MM.yyyy}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data wymeldowania:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding DataDoDate, StringFormat=dd.MM.yyyy}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Cena:" FontWeight="Bold"/>
+                                                    <TextBlock Margin="0,0,0,5">
+    <Run Text="{Binding Cena, StringFormat=F2}"/>
+    <Run Text=" "/>
+    <Run Text="{Binding Waluta}"/>
+                                                    </TextBlock>
+
+
+                                                    <TextBlock Text="Ocena:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Ocena}" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Uwagi:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Uwagi}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            
+                                                    <Button Content="Edytuj" Width="120" HorizontalAlignment="Left" Click="BtnEditAccommodation_Click"/>
+
+                                                </StackPanel>
+
+                                               
+                                                <StackPanel x:Name="editMode" Visibility="Collapsed">
+
+
+                                                    <TextBlock Text="Nazwa:" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Nazwa, Mode=TwoWay}" Margin="0,0,0,5"/>
+                                                    
+                                                    
+                                                    <TextBlock Text="Kategoria:" FontWeight="Bold"/>
+                                                    <ComboBox x:Name="cmbEditCategory" IsEditable="True" Loaded="cmbEditAccommodationCategory_Loaded"/>
+
+                                                    <TextBlock Text="Adres:" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Adres, Mode=TwoWay}" TextWrapping="Wrap" Margin="0,0,0,5" IsReadOnly="True"/>
+                                                    <Button Content="Pobierz adres z mapy"
+                                                     Width="160"
+                                                     Height="26"
+                                                     Margin="0,0,0,10"
+                                                     Click="BtnPickAccommodationFromMap_Click"/>
+
+                                                    <TextBlock Text="Data zameldowania:" FontWeight="Bold"/>
+                                                    <DatePicker SelectedDate="{Binding DataOdDate, Mode=TwoWay}"  x:Name="dpFrom" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data wymeldowania:" FontWeight="Bold"/>
+                                                    <DatePicker SelectedDate="{Binding DataDoDate, Mode=TwoWay}"  x:Name="dpTo" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Cena:" FontWeight="Bold"/>
+                                                    
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                        <TextBox
+    Text="{Binding CenaString,
+                   Mode=TwoWay,
+                   UpdateSourceTrigger=PropertyChanged}"
+    Width="100"/>
+
+                                                        <ComboBox Width="60" Margin="5,0,0,0"
+          SelectedValue="{Binding Waluta, Mode=TwoWay}"
+          SelectedValuePath="Content">
+                                                            <ComboBoxItem Content="PLN"/>
+                                                            <ComboBoxItem Content="EUR"/>
+                                                            <ComboBoxItem Content="USD"/>
+                                                        </ComboBox>
+
+                                                    </StackPanel>
+
+
+                                                    <TextBlock Text="Ocena:" FontWeight="Bold"/>
+                                                    <TextBox x:Name="txtEditRating" Text="{Binding Ocena, Mode=TwoWay}" Margin="0,0,0,5" PreviewTextInput="txtEditRating_PreviewTextInput"/>
+
+
+                                                    <TextBlock Text="Uwagi:" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Uwagi, Mode=TwoWay}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Left">
+                                                        <Button Content="Zapisz"
+Click=" BtnSaveEditedAccommodation_Click"
+Width="120"
+Height="30"
+Padding="5,2"
+Margin="0,0,10,0"
+Background="#007ACC"
+Foreground="White"
+BorderBrush="#005A9E"/>
+
+                                                        <Button Content="Usuń"
+Click="BtnDeleteAccommodation_Click"
+Width="120"
+Height="30"
+Padding="5,2"
+Background="#D32F2F"
+Foreground="White"
+BorderBrush="#B71C1C"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                           
+                                        </Expander>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+
+          
+
+
+                <TabItem Header="Zwiedzanie">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                       
+                        <Button Content="Dodaj punkt zwiedzaniowy"
+                Width="160"
+                Height="30"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,15"
+                Click="BtnOpenAddVisitPointWindow_Click"/>
+                        
+
+                        
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl x:Name="lstVisits" HorizontalAlignment="Stretch">
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Expander Margin="0,0,0,10" >
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Naglowek}" TextWrapping="Wrap"/>
+                                            </Expander.Header>
+
+                                            <StackPanel Margin="10">
+                                              
+                                                <StackPanel x:Name="viewMode">
+                                                    <TextBlock Text="Kategoria" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Kategoria}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Adres:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Adres}" TextWrapping="Wrap" Margin="0,0,0,5"/>
+
+                                                    <TextBlock Text="Data:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding DataZwiedzaniaDate, StringFormat=dd.MM.yyyy}" Margin="0,0,0,5"/>
+
+
+                                                    <TextBlock Text="Uwagi:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Uwagi}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                                    <TextBlock Text="Cena:" FontWeight="Bold"/>
+                                                    <TextBlock Margin="0,0,0,5">
+    <Run Text="{Binding CenaString}"/>
+    <Run Text=" "/>
+    <Run Text="{Binding Waluta}"/>
+                                                    </TextBlock>
+
+
+                                                    <TextBlock Text="Ocena:" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding Ocena}" Margin="0,0,0,10"/>
+
+                                                    <Button Content="Edytuj" Width="120" HorizontalAlignment="Left" Click="BtnEditVisitPoint_Click"/>
+                                                </StackPanel>
+
+                                               
+                                                <StackPanel x:Name="editMode" Visibility="Collapsed">
+                                                    <TextBlock Text="Kategoria:" FontWeight="Bold"/>
+                                                    
+                                             
+                                                    <ComboBox x:Name="cmbEditCategory" Loaded="cmbEditCategory_Loaded"
+                                                     Margin="0,0,0,10"
+                                                     IsEditable="True"
+                                                     SelectionChanged="cmbEditCategory_SelectionChanged"/>
+                                                    <TextBlock Text="Adres:" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Adres, Mode=TwoWay}" Margin="0,0,0,5"  IsReadOnly="True"/>
+                                                    <Button Content="Pobierz adres z mapy"
+                                                     Width="160"
+                                                     Height="26"
+                                                     Margin="0,0,0,10"
+                                                     Click="BtnPickVisitPointFromMap_Click"/>
+
+                                                    <TextBlock Text="Data wizyty:" FontWeight="Bold"/>
+                                                    <DatePicker x:Name="dpDate"
+                                                    SelectedDate="{Binding DataZwiedzaniaDate, Mode=TwoWay}"
+                                                    SelectedDateChanged="dpVisitDate_SelectedDateChanged"
+                                                    Margin="0,0,0,5"/>
+
+
+
+                                                    <TextBlock Text="Uwagi:" FontWeight="Bold"/>
+                                                    <TextBox Text="{Binding Uwagi, Mode=TwoWay}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                                                    <TextBlock Text="Cena:" FontWeight="Bold"/>
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                        <TextBox Width="100"
+         Text="{Binding CenaString,
+                        Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                        <ComboBox Width="60" Margin="5,0,0,0"
+              SelectedValue="{Binding Waluta, Mode=TwoWay}"
+              SelectedValuePath="Content">
+                                                            <ComboBoxItem Content="PLN"/>
+                                                            <ComboBoxItem Content="EUR"/>
+                                                            <ComboBoxItem Content="USD"/>
+                                                        </ComboBox>
+                                                    </StackPanel>
+
+
+                                                    <TextBlock Text="Ocena:" FontWeight="Bold"/>
+                                                    <TextBox x:Name="txtEditRating" Text="{Binding Ocena, Mode=TwoWay}" Margin="0,0,0,5" PreviewTextInput="txtEditRating_PreviewTextInput"/>
+
+                                                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Left">
+                                                        <Button Content="Zapisz"
+Click="BtnSaveEditedVisitPoint_Click"
+Width="120"
+Height="30"
+Padding="5,2"
+Margin="0,0,10,0"
+Background="#007ACC"
+Foreground="White"
+BorderBrush="#005A9E"/>
+
+                                                        <Button Content="Usuń"
+Click=" BtnDeleteVisitPoint_Click"
+Width="120"
+Height="30"
+Padding="5,2"
+Background="#D32F2F"
+Foreground="White"
+BorderBrush="#B71C1C"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Expander>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Wydatki">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="10">
+
+                           
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Łączne wydatki:" FontWeight="Bold" FontSize="16"/>
+                                <TextBlock x:Name="txtTotalExpenses" FontSize="16" Margin="10,0,0,0"/>
+                            </StackPanel>
+
+
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Waluta wyświetlania:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <ComboBox x:Name="cbCurrency" Width="80" SelectedIndex="0"
+          SelectionChanged="cbCurrency_SelectionChanged">
+                                    <ComboBoxItem Content="PLN"/>
+                                    <ComboBoxItem Content="EUR"/>
+                                    <ComboBoxItem Content="USD"/>
+                                </ComboBox>
+
+                            </StackPanel>
+
+                           
+                            <StackPanel x:Name="spExpensesByCategory" />
+
+                          
+                            <lvc:PieChart x:Name="pieChartExpenses"
+                          LegendLocation="Right"
+                          Width="300"
+                          Height="300"
+                          Margin="0,10,0,20"/>
+
+                         
+                            <TextBlock Text="Szczegółowe wydatki wg kategorii"
+                       FontWeight="Bold"
+                       FontSize="16"
+                       Margin="0,10,0,5"/>
+
+                            
+                            <StackPanel x:Name="spDetailedExpenses" />
+
+                           
+                          
+                            <lvc:PieChart x:Name="pieChartDetailedExpenses"
+             LegendLocation="Right"
+             Width="500"
+             Height="500"
+             Margin="0,10,0,0"/>
+
+
+                           
+                           
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Ułóż plan">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Content="Generuj harmonogram" Width="200" Height="35" Click="BtnGenerujPlan_Click" />
+
+                        <ListBox x:Name="HarmonogramListBox" Grid.Row="1" Margin="0,10,0,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,5">
+                                        <TextBlock Text="{Binding Tytul}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Opis}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
+
+
+            </TabControl>
+
+        </Border>
+    </Grid>
+
+</Window>
